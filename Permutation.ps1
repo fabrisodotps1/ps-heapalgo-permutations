@@ -3,34 +3,34 @@ param()
 
 function Add-Permutation {
     param(
-        [Array]$GeneratedPermutations,
         [Array]$ToPermute,
         [int]$ArrLength
     )
+    $GeneratedPermutations = @()
 
     if ($ArrLength -eq 1) {
         $GeneratedPermutations += $ToPermute
+        return $GeneratedPermutations
     } else {
         $ArrLength = $ArrLength - 1
         Add-Permutation -ToPermute $ToPermute -ArrLength $ArrLength
-        for ($i = 0, $i -lt $ArrLength, $i++) {
-            $mod = $ArrLength % 2
-            if($mod -eq 0) {
-                # Swap $i and $Length
-                $temp = $ToPermute[$i]
+        $i = 0
+        while ($i -lt $ArrLength) {
+            if ($ArrLength % 2 -eq 0) {
+                $Temp = $ToPermute[$i]
                 $ToPermute[$i] = $ToPermute[$ArrLength]
-                $ToPermute[$ArrLength] = $temp
+                $ToPermute[$ArrLength] = $Temp
             } else {
-                # Swap 0 and $Length
-                $temp = $ToPermute[0]
+                $Temp = $ToPermute[0]
                 $ToPermute[0] = $ToPermute[$ArrLength]
-                $ToPermute[$ArrLength] = $temp
+                $ToPermute[$ArrLength] = $Temp
             }
-            Add-Permutation -GeneratedPermutations $GeneratedPermutations -ToPermute $ToPermute -ArrLength $ArrLength
+            Add-Permutation -ToPermute $ToPermute -ArrLength $ArrLength
+            $i++
         }
     }
 }
 
-$ToPermute = 1..3
-$GeneratedPermutations = @()
-Add-Permutation -GeneratedPermutations $GeneratedPermutations -ToPermute $ToPermute -ArrLength $ToPermute.Length
+$ToPermute = "A","B"
+$perm = Add-Permutation -ToPermute $ToPermute -ArrLength $ToPermute.Length
+$perm
